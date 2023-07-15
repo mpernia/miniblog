@@ -27,12 +27,11 @@ jobs:
     - name: Copy Repository to src Folder
       run: cp -R . /src
     - name: Configure PHPUnit
+      run: sed -i 's|<directory>./tests/|<directory>./src/Tests/</directory>|' phpunit.xml
     - name: Create Database
       run: |
-        sed -i 's|<directory>./tests/Unit</directory>|<directory>./src/Tests/Unit</directory>|' phpunit.xml
-        sed -i 's|<directory>./tests/Feature</directory>|<directory>./src/Tests/Feature</directory>|' phpunit.xml
-        mkdir -p database
-        touch database/database.sqlite
+           mkdir -p database
+           touch database/database.sqlite
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
