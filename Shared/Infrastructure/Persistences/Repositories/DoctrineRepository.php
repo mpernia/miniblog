@@ -6,7 +6,7 @@ use MiniBlog\Shared\Domain\Contracts\RepositoryInterface;
 
 abstract class DoctrineRepository implements RepositoryInterface
 {
-    abstract public function setModel();
+    abstract public function setModel() : string;
 
     public static function sqlRaw(string $sql, array $params = []): array
     {

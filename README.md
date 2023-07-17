@@ -275,7 +275,7 @@ rm vite.config.js
 ### Migrations
 * Run this command to create all tables and insert the initial data:
     ```sh
-    php artisan migrate --seed` command. 
+    php artisan migrate --seed command. 
     ```
 **Notice:** seed is important, because it will create the first admin user for you.
 

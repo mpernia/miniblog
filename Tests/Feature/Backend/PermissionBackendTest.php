@@ -4,7 +4,7 @@ namespace MiniBlog\Tests\Feature\Backend;
 
 use Tests\TestCase;
 
-class PermissionTest extends TestCase
+class PermissionBackendTest extends TestCase
 {
     public function test_unauthenticated_user_cannot_access_to_permission()
     {

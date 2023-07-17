@@ -7,7 +7,7 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
 class PermissionCreator implements CreatorInterface
 {
-    public static function create(DataTransferObject $data): void
+    public static function create(DataTransferObject $data) : DataTransferObject
     {
         $repository = new PermissionRepository;
     }

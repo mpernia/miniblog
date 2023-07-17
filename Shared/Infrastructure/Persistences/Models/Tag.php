@@ -10,9 +10,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Tag extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public $table = 'tags';
     public $timestamps = false;
+
+    protected $dates = [
+        'deleted_at',
+    ];
 
     protected $fillable = [
         'name',
@@ -22,5 +27,10 @@ class Tag extends Model
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }

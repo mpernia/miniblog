@@ -10,6 +10,7 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleFinder;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleUpdater;
+use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\RoleDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreRoleRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateRoleRequest;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Permission;
@@ -67,6 +68,7 @@ class RoleController extends Controller
     public function create()
     {
         //abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         //PermissionFinder::all();
         $permissions = Permission::orderBy('description')->pluck('description', 'id');
 
@@ -76,36 +78,48 @@ class RoleController extends Controller
     public function store(StoreRoleRequest $request)
     {
         //abort_if(Gate::denies('role_store'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //RoleCreator::create();
+
+        RoleCreator::create(
+            new RoleDto($request->all())
+        );
     }
 
     public function edit(int $id)
     {
         //abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         //PermissionFinder::all();
         $permissions = Permission::pluck('description', 'id');
-        $role = Role::find($id);
+        $role = RoleFinder::find($id);
+
         return view('backoffice.role.edit', compact('role', 'permissions'));
     }
 
     public function show(int $id)
     {
         //abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         //RoleFinder::find($id);
-        $role = Role::find($id);
+        $role = RoleFinder::find($id);
+
         return view('backoffice.role.show', compact('role'));
     }
 
     public function update(UpdateRoleRequest $request, int $id)
     {
         //abort_if(Gate::denies('role_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //RoleUpdater::update();
+
+        RoleUpdater::update(
+            new RoleDto($request->all()),
+            $id
+        );
     }
 
     public function destroy(int $id)
     {
         //abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //RoleDestroyer::destroy($id);
+
+        RoleDestroyer::destroy($id);
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

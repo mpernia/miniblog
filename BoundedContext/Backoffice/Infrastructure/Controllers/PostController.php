@@ -11,6 +11,7 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostFinder;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostUpdater;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagFinder;
+use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\PostDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StorePostRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdatePostRequest;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Category;
@@ -109,18 +110,20 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         //abort_if(Gate::denies('post_store'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PostCreator::create();
+
+        PostCreator::create(
+            new PostDto($request->all())
+        );
     }
 
     public function edit(int $id)
     {
         //abort_if(Gate::denies('post_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //CategoryFinder::all();
         //TagFinder::all();
 
         $categories = Category::pluck('name', 'id');
         $tags = Tag::pluck('name', 'id');
-        $post = Post::find($id);
+        $post = PostFinder::find($id);
         $post->load('categories', 'tags');
 
         return view('backoffice.post.edit', compact('categories', 'post', 'tags'));
@@ -129,9 +132,8 @@ class PostController extends Controller
     public function show(int $id)
     {
         //abort_if(Gate::denies('post_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PostFinder::find($id);
 
-        $post = Post::find($id);
+        $post = PostFinder::find($id);
         $post->load('categories', 'tags');
 
         return view('backoffice.post.show', compact( 'post'));
@@ -140,13 +142,18 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, int $id)
     {
         //abort_if(Gate::denies('post_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PostUpdater::update();
+
+        PostUpdater::update(
+            new PostDto($request->all()),
+            $id
+        );
     }
 
     public function destroy(int $id)
     {
         //abort_if(Gate::denies('post_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PostDestroyer::destroy();
+
+        PostDestroyer::destroy($id);
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

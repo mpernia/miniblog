@@ -6,7 +6,7 @@ use MiniBlog\Shared\Infrastructure\Exceptions\UndefinedMethodException;
 
 abstract class BaseRepository extends EloquentRepository
 {
-    abstract public function setModel();
+    abstract public function setModel() : string;
 
     public function __construct()
     {

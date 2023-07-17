@@ -9,7 +9,7 @@ class UpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            'title' => ['string', 'required'],
         ];
     }
 

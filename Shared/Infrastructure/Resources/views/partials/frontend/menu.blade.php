@@ -10,11 +10,9 @@
     </div>
 
     <h3 class="pb-2 mb-2 fst-italic border-bottom">Tags</h3>
-    <div class="pb-4">
-        <ol class="list-unstyled">
-            @foreach($tags as $id => $name)
-                <li><a href="{{ route('frontend.tags.show', [$id]) }}">{{ $name }}</a></li>
-            @endforeach
-        </ol>
+    <div class="tag-cloud">
+        @foreach ($tags as $tag)
+            <a href="{{ route('frontend.tags.show', $tag->id) }}" style="font-size: {{ $tag->score }}px;">{{ $tag->name }}</a>
+        @endforeach
     </div>
 </div>

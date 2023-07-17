@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title')->nullable();
+            $table->string('title');
             $table->longText('content')->nullable();
             $table->longText('excerpt')->nullable();
             $table->timestamps();

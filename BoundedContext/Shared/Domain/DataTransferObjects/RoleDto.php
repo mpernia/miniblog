@@ -6,5 +6,8 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
 class RoleDto extends DataTransferObject
 {
-
+    protected $fillable = [
+        'id',
+        'title',
+    ];
 }

@@ -35,14 +35,6 @@
                                     {{ trans('global.continue_reading') }}
                                     <svg class="bi"><use xlink:href="#chevron-right"/></svg>
                                 </a>
-                                {{--
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">{{ trans('global.delete') }}</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">{{ trans('global.edit') }}</button>
-                                    </div>
-                                </div>
-                                --}}
                             </div>
                         </div>
                     </div>

@@ -6,5 +6,9 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
 class CategoryDto extends DataTransferObject
 {
-
+    protected $fillable = [
+        'id',
+        'name',
+        'slug',
+    ];
 }

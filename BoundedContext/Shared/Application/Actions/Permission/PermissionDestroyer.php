@@ -6,7 +6,7 @@ use MiniBlog\Shared\Domain\Contracts\DestroyerInterface;
 
 class PermissionDestroyer implements DestroyerInterface
 {
-    public static function destroy(int|string $value, string $key = 'id'): void
+    public static function destroy(int|string $value): void
     {
         $repository = new PermissionRepository;
     }

@@ -4,7 +4,9 @@ namespace MiniBlog\Shared\Infrastructure\Database\seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use MiniBlog\Shared\Infrastructure\Persistences\Models\Category;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Post;
+use MiniBlog\Shared\Infrastructure\Persistences\Models\Tag;
 
 class PostTableSeeder extends Seeder
 {

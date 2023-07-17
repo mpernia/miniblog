@@ -8,7 +8,7 @@ use MiniBlog\Shared\Infrastructure\Persistences\Repositories\BaseRepository;
 
 class TagRepository extends BaseRepository implements TagRepositoryInterface
 {
-    public function setModel()
+    public function setModel(): string
     {
         return Tag::class;
     }

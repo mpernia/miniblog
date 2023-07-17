@@ -7,7 +7,7 @@ use MiniBlog\Shared\Infrastructure\Persistences\Repositories\BaseRepository;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
-    public function setModel()
+    public function setModel(): string
     {
         return User::class;
     }

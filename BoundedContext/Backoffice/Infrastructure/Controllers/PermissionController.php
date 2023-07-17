@@ -59,43 +59,36 @@ class PermissionController extends Controller
 
     public function create()
     {
-        //abort_if(Gate::denies('permission_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('backoffice.permission.create');
+        abort_if(Gate::denies('permission_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
     }
 
     public function store(StorePermissionRequest $request)
     {
-        //abort_if(Gate::denies('permission_store'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PermissionCreator::create();
+        abort_if(Gate::denies('permission_store'), Response::HTTP_FORBIDDEN, '403 Forbidden');
     }
 
     public function edit(int $id)
     {
-        //abort_if(Gate::denies('permission_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PermissionFinder::find($id);
-        $permission = Permission::find($id);
-        return view('backoffice.permission.edit', compact('permission'));
+        abort_if(Gate::denies('permission_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
     }
 
     public function show(int $id)
     {
         //abort_if(Gate::denies('permission_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PermissionFinder::find($id);
-        $permission = Permission::find($id);
+
+        $permission = PermissionFinder::find($id);
+
         return view('backoffice.permission.show', compact('permission'));
     }
 
     public function update(UpdatePermissionRequest $request, int $id)
     {
-        //abort_if(Gate::denies('permission_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PermissionUpdater::update();
+        abort_if(Gate::denies('permission_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
     }
 
     public function destroy(int $id)
     {
-        //abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PermissionDestroyer::destroy($id);
+        abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

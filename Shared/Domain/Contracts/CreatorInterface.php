@@ -6,5 +6,5 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
 interface CreatorInterface
 {
-    public static function create(DataTransferObject $data): void;
+    public static function create(DataTransferObject $data);
 }

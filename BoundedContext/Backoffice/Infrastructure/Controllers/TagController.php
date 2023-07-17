@@ -9,6 +9,7 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagFinder;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagUpdater;
+use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\TagDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreTagRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateTagRequest;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Tag;
@@ -67,35 +68,45 @@ class TagController extends Controller
     public function store(StoreTagRequest $request)
     {
         //abort_if(Gate::denies('tag_store'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //TagCreator::create();
+
+        TagCreator::create(
+            new TagDto($request->all())
+        );
     }
 
     public function edit(int $id)
     {
         //abort_if(Gate::denies('tag_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //TagFinder::find($id);
-        $tag = Tag::find($id);
+
+        $tag = TagFinder::find($id);
+
         return view('backoffice.tag.edit', compact('tag'));
     }
 
     public function show(int $id)
     {
         //abort_if(Gate::denies('tag_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //TagFinder::find($id);
-        $tag = Tag::find($id);
+
+        $tag = TagFinder::find($id);
+
         return view('backoffice.tag.show', compact('tag'));
     }
 
     public function update(UpdateTagRequest $request, int $id)
     {
         //abort_if(Gate::denies('tag_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //TagUpdater::update();
+
+        TagUpdater::update(
+            new TagDto($request->all()),
+            $id
+        );
     }
 
     public function destroy(int $id)
     {
         //abort_if(Gate::denies('tag_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //TagDestroyer::destroy($id);
+
+        TagDestroyer::destroy($id);
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

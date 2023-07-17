@@ -4,7 +4,7 @@ namespace MiniBlog\Tests\Feature\Backend;
 
 use Tests\TestCase;
 
-class RoleTest extends TestCase
+class RoleBackendTest extends TestCase
 {
     public function test_unauthenticated_user_cannot_access_to_role()
     {

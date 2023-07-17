@@ -4,15 +4,19 @@ namespace MiniBlog\Shared\Domain\Contracts;
 
 interface RepositoryInterface
 {
-    public static function sqlRaw(string $sql, array $params = []): array;
+    public static function sqlRaw(string $query): array;
+
+    public function sync(int $id, array $ids, string $related, string $relatedKey, string $foreignKey) : void;
 
     public function all();
 
     public function find(int $id);
 
-    public function findWhere($column, $value);
+    public function findWhere(string $column, mixed $value);
 
-    public function findWhereFirst($column, $value);
+    public function findWhereFirst(string $column, mixed $value);
+
+    public function pluck(string $column, string $key = 'id');
 
     public function paginate(int $perPage = 10);
 

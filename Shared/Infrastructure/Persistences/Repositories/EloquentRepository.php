@@ -26,7 +26,7 @@ abstract class EloquentRepository implements RepositoryInterface
         return app()->make($this->setModel());
     }
 
-    protected function hasNameWhere($where): bool
+    protected function hasNameWhere(string $where): bool
     {
         return method_exists($this, $where);
     }
@@ -36,9 +36,16 @@ abstract class EloquentRepository implements RepositoryInterface
         return $this->model->table;
     }
 
-    public static function sqlRaw(string $sql, array $params = []): array
+    public static function sqlRaw(string $query) : array
     {
-        return DB::select($sql, $params);
+        return DB::select($query);
+    }
+
+    public function sync(int $id, array $ids, string $related, string $relatedKey, string $foreignKey) : void
+    {
+        DB::delete("DELETE * FROM {$related} WHERE {$foreignKey} = {$id}");
+        $values = stringCouples($id, $ids);
+        DB::insert("INSERT INTO {$related} ({$relatedKey}, {$foreignKey}) VALUES {$values}");
     }
 
     public function all()
@@ -51,14 +58,19 @@ abstract class EloquentRepository implements RepositoryInterface
         return $this->model->findOrFail($id);
     }
 
-    public function findWhere($column, $value)
+    public function findWhere(string $column, mixed $value)
     {
         return $this->model->where($column, $value)->get();
     }
 
-    public function findWhereFirst($column, $value)
+    public function findWhereFirst(string $column, mixed $value)
     {
         return $this->model->where($column, $value)->firstOrFail();
+    }
+
+    public function pluck(string $column, string $key = 'id')
+    {
+        return $this->model->pluck($column, $key);
     }
 
     public function paginate(int $perPage = 10)

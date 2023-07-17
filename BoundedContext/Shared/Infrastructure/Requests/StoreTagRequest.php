@@ -9,7 +9,8 @@ class StoreTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            'name' => ['string', 'required'],
+            'slug'  => ['string', 'nullable'],
         ];
     }
 

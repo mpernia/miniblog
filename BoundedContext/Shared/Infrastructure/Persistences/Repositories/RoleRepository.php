@@ -7,7 +7,7 @@ use MiniBlog\Shared\Infrastructure\Persistences\Repositories\BaseRepository;
 
 class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 {
-    public function setModel()
+    public function setModel(): string
     {
         return Role::class;
     }

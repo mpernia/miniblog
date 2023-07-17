@@ -8,7 +8,7 @@ use MiniBlog\Shared\Infrastructure\Persistences\Repositories\BaseRepository;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
-    public function setModel()
+    public function setModel(): string
     {
         return Post::class;
     }

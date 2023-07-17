@@ -10,6 +10,7 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserFinder;
 use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserUpdater;
+use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\UserDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreUserRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateUserRequest;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Role;
@@ -82,39 +83,49 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         //abort_if(Gate::denies('user_store'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //UserCreator::create();
+
+        UserCreator::create(
+            new UserDto($request->all())
+        );
     }
 
     public function edit(int $id)
     {
         //abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         //RoleFinder::all();
-        //UserFinder::find($id);
+
         $roles = Role::pluck('title', 'id');
-        $user = User::find($id);
+        $user = UserFinder::find($id);
         $user->load('roles');
+
         return view('backoffice.user.edit', compact('roles', 'user'));
     }
 
     public function show(int $id)
     {
         //abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //UserFinder::find($id);
-        $user = User::find($id);
+
+        $user = UserFinder::find($id);
         $user->load('roles');
+
         return view('backoffice.user.show', compact('user'));
     }
 
     public function update(UpdateUserRequest $request, int $id)
     {
         //abort_if(Gate::denies('user_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //UserUpdater::update();
+
+        UserUpdater::update(
+            new UserDto($request->all()),
+            $id
+        );
     }
 
     public function destroy(int $id)
     {
         //abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //UserDestroyer::destroy($id);
+
+        UserDestroyer::destroy($id);
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
