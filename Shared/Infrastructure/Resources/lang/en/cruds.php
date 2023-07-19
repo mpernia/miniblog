@@ -70,6 +70,7 @@ return [
             'verified_at'                  => 'Verified at',
             'verified_at_helper'           => ' ',
             'verification_token'           => 'Verification token',
+            'verification_token_helper'    => ' ',
         ],
     ],
     'contentManagement' => [
@@ -86,6 +87,8 @@ return [
             'name_helper'       => ' ',
             'slug'              => 'Slug',
             'slug_helper'       => ' ',
+            'parent'            => 'Parent category',
+            'parent_helper'     => ' ',
             'created_at'        => 'Created at',
             'created_at_helper' => ' ',
             'updated_at'        => 'Updated At',
@@ -120,6 +123,8 @@ return [
             'id_helper'             => ' ',
             'title'                 => 'Title',
             'title_helper'          => ' ',
+            'slug'                  => 'Slug',
+            'title_slug'            => ' ',
             'category'              => 'Categories',
             'category_helper'       => ' ',
             'tag'                   => 'Tags',
@@ -142,5 +147,4 @@ return [
         'title'          => 'Settings',
         'title_singular' => 'Setting',
     ],
-
 ];

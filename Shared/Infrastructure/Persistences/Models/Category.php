@@ -22,6 +22,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'slug',
+        'parent_id',
     ];
 
     public function posts()
@@ -32,6 +33,11 @@ class Category extends Model
     public function tags()
     {
         return $this->hasManyThrough(Tag::class, Post::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

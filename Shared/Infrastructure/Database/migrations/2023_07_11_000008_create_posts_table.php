@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
+            $table->string('slug')->nullable();
             $table->longText('content')->nullable();
             $table->longText('excerpt')->nullable();
             $table->timestamps();

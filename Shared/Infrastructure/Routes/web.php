@@ -29,8 +29,8 @@ Route::group(['as' => 'frontend.', 'middleware' => 'guest'], function (){
     Route::get('terms', TermController::class)->name('terms');
     Route::get('cookies', CookieController::class)->name('cookies');
     Route::get('faqs', FaqController::class)->name('faqs');
-    Route::resource('categories', FrontendCategoryController::class)->only('index', 'show');
-    Route::resource('tags', FrontendTagController::class)->only('index', 'show');
+    Route::resource('categories', FrontendCategoryController::class)->only('show');
+    Route::resource('tags', FrontendTagController::class)->only('show');
     Route::resource('posts', FrontendPostController::class)->only('index', 'show');
 });
 
@@ -41,5 +41,8 @@ Route::group(['prefix' => 'dashboard', 'as' => 'backoffice.'/*, 'middleware' => 
     Route::resource('users', UserController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
+    Route::post('posts/media', [PostController::class, 'storeMedia'])->name('posts.storeMedia');
+    Route::post('posts/ckmedia', [PostController::class, 'storeCKEditorImages'])->name('posts.storeCKEditorImages');
     Route::resource('posts', PostController::class);
+
 });

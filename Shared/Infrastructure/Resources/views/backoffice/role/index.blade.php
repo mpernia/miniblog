@@ -10,7 +10,6 @@
         <div class="card-header">
             {{ trans('cruds.role.title_singular') }} {{ trans('global.list') }}
         </div>
-
         <div class="card-body">
             <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-Role">
                 <thead>
@@ -24,7 +23,7 @@
                     <th>
                         {{ trans('cruds.role.fields.permissions') }}
                     </th>
-                    <th>
+                    <th class="td-action">
                         &nbsp;
                     </th>
                 </tr>
@@ -40,6 +39,18 @@
         $(function () {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
+            {{-- @can('role_create') --}}
+            let createButtonTrans = '{{ trans('global.add') }} {{ trans('cruds.role.title_singular') }}';
+            let createButton = {
+                text: createButtonTrans,
+                className: ['btn-success', 'btn', 'btn-datatable-action'],
+                action: function (){
+                    $(location).attr('href',"{{ route('backoffice.roles.create') }}");
+                }
+            }
+            dtButtons.push(createButton);
+            {{-- @endcan --}}
+
             let dtOverrideGlobals = {
                 buttons: dtButtons,
                 processing: true,
@@ -48,7 +59,7 @@
                 aaSorting: [],
                 ajax: "{{ route('backoffice.roles.index') }}",
                 columns: [
-                    { data: 'placeholder', name: 'placeholder' },
+                    { data: 'placeholder', name: 'placeholder', visible:false },
                     { data: 'title', name: 'title' },
                     { data: 'permissions', name: 'permissions.description' },
                     { data: 'actions', name: '{{ trans('global.actions') }}' }

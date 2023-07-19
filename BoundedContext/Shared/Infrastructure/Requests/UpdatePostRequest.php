@@ -10,6 +10,7 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'title' => ['string', 'required'],
+            'slug' => ['string', 'nullable'],
             'content' => ['string', 'nullable'],
             'excerpt' => ['string', 'nullable'],
         ];

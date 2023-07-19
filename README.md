@@ -9,6 +9,7 @@ This repository is developed for Laravel Framework 10 or higher.
 - [Installation](#installation)
 - [Dependencies](#dependencies)
 - [Configuration](#configuration)
+  - [Laravel Media Library](#spatie-laravel-medialibrary)
   - [Modify the main composer file](#modify-the-main-composer-file)
   - [Providers](#providers)
   - [Authentication](#authentication)
@@ -57,6 +58,38 @@ To install the required libraries in the terminal move to the root dir and run t
   
 
 ## Configuration
+
+### Laravel Media Library
+
+You need to publish the migration to create the media table:
+
+```php
+php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="migrations"
+```
+Publishing the config file is optional:
+
+```php
+php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="config"
+```
+
+By default, the media library will store its files on Laravel's public disk. If you want a dedicated disk you should add a disk to `config/filesystems.php`. This would be a typical configuration:
+
+```php
+    'disks' => [
+        'media' => [
+            'driver' => 'local',
+            'root'   => public_path('media'),
+            'url'    => env('APP_URL').'/media',
+        ],
+```
+
+If you configure a dedicated disk you need to edit the config file `media-library.php` and change the default value in disk_name parameter like this code:
+
+```php
+
+'disk_name' => 'media',
+
+```
 
 ### Modify the main composer file
 

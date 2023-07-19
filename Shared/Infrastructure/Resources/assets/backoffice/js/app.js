@@ -14,3 +14,18 @@ $(document).ready(function () {
 
     $('.select2').select2();
 })
+
+
+let titleInput = document.getElementById('title');
+let slugInput = document.getElementById('slug');
+if(!titleInput){
+    titleInput = document.getElementById('name');
+}
+
+if (titleInput && slugInput) {
+    titleInput.addEventListener('input', () => {
+        let textTitle = titleInput.value;
+        let slugged = textTitle.replace(/\s+/g, '-');
+        slugInput.value = slugged.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    });
+}

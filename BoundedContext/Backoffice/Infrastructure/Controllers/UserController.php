@@ -5,7 +5,8 @@ namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleFinder;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\User\UserDataTable;
+use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleLister;
 use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserFinder;
@@ -13,9 +14,6 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserUpdater;
 use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\UserDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreUserRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateUserRequest;
-use MiniBlog\Shared\Infrastructure\Persistences\Models\Role;
-use MiniBlog\Shared\Infrastructure\Persistences\Models\User;
-use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -23,10 +21,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         //abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //UserFinder::all();
+
         if ($request->ajax()) {
-            $query = User::with(['roles'])->select(sprintf('%s.*', (new User)->table));
-            $table = Datatables::of($query);
+            $table = Datatables::of(UserDataTable::source());
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
@@ -47,15 +44,12 @@ class UserController extends Controller
             });
 
             $table->editColumn('name', function ($row) {
-                return $row->name ? $row->name : '';
+                return $row->name ?? '';
             });
             $table->editColumn('email', function ($row) {
-                return $row->email ? $row->email : '';
+                return $row->email ?? '';
             });
 
-            $table->editColumn('verified', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->verified ? 'checked' : null) . '>';
-            });
             $table->editColumn('roles', function ($row) {
                 $labels = [];
                 foreach ($row->roles as $role) {
@@ -65,7 +59,7 @@ class UserController extends Controller
                 return implode(' ', $labels);
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'verified', 'roles']);
+            $table->rawColumns(['actions', 'placeholder', 'roles']);
 
             return $table->make(true);
         }
@@ -75,7 +69,8 @@ class UserController extends Controller
     public function create()
     {
         //abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $roles = Role::pluck('title', 'id');
+
+        $roles = RoleLister::list();
 
         return view('backoffice.user.create', compact('roles'));
     }
@@ -92,11 +87,9 @@ class UserController extends Controller
     public function edit(int $id)
     {
         //abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //RoleFinder::all();
 
-        $roles = Role::pluck('title', 'id');
+        $roles = RoleLister::list();
         $user = UserFinder::find($id);
-        $user->load('roles');
 
         return view('backoffice.user.edit', compact('roles', 'user'));
     }
@@ -106,7 +99,6 @@ class UserController extends Controller
         //abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $user = UserFinder::find($id);
-        $user->load('roles');
 
         return view('backoffice.user.show', compact('user'));
     }
@@ -127,6 +119,6 @@ class UserController extends Controller
 
         UserDestroyer::destroy($id);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return back();
     }
 }

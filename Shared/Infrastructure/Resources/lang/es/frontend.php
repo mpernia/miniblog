@@ -6,6 +6,9 @@ return [
     'title' => 'El mundo hoy',
     'copyright' => 'MiniBlog Inc - Todos los derechos reservados.',
     'lang' => 'Elegir idioma',
+    'categories' => 'Categorías',
+    'tags' => 'Etiquetas',
+    'uncategorized' => 'Sin categorizar',
     'static_pages' => [
         'contact' => [
             'title' => 'Sobre nosotros',

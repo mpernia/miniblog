@@ -61,8 +61,8 @@ class DataTransferObject implements DataTransferObjectInterface
     private function fill(array $properties): void
     {
         foreach ($properties as $key => $value){
-            if (!empty($value) && in_array($key, $this->fillable, true)) {
-                $this->{$key} = $value;
+            if (in_array($key, $this->fillable, true)) {
+                $this->{$key} = $value ?? null;
             }
         }
     }

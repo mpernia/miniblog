@@ -6,6 +6,9 @@ return [
     'title' => 'The world today',
     'copyright' => 'MiniBlog Inc - All rights reserved.',
     'lang' => 'Set language',
+    'categories' => 'Categories',
+    'tags' => 'Tags',
+    'uncategorized' => 'Uncategorized',
     'static_pages' => [
         'contact' => [
             'title' => 'Contact Us',

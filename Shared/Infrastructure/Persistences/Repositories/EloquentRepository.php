@@ -36,6 +36,11 @@ abstract class EloquentRepository implements RepositoryInterface
         return $this->model->table;
     }
 
+    public function query()
+    {
+        return $this->model->query();
+    }
+
     public static function sqlRaw(string $query) : array
     {
         return DB::select($query);

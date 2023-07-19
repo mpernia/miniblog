@@ -11,10 +11,13 @@ class PostController extends Controller
     public function index(Request $request)
     {
         //PostFinder::all();
+        return view('frontend.post');
     }
 
     public function show(int $id)
     {
-        //PostFinder::find($id);
+        $post = PostFinder::find($id);
+
+        return view('frontend.page', compact('post'));
     }
 }

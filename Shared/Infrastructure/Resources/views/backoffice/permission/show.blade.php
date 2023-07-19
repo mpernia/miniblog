@@ -10,7 +10,6 @@
         <div class="card-header">
             {{ trans('global.show') }} {{ trans('cruds.permission.title') }}
         </div>
-
         <div class="card-body">
             <div class="form-group">
                 <div class="form-group">
@@ -39,7 +38,7 @@
                     </tbody>
                 </table>
                 <div class="form-group">
-                    <a class="btn btn-default" href="{{ route('admin.permissions.index') }}">
+                    <a class="btn btn-danger" href="{{ route('admin.permissions.index') }}">
                         {{ trans('global.back_to_list') }}
                     </a>
                 </div>

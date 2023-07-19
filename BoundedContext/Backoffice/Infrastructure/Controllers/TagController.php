@@ -5,6 +5,7 @@ namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Tag\TagDataTable;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagFinder;
@@ -12,8 +13,6 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagUpdater;
 use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\TagDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreTagRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateTagRequest;
-use MiniBlog\Shared\Infrastructure\Persistences\Models\Tag;
-use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class TagController extends Controller
@@ -21,10 +20,9 @@ class TagController extends Controller
     public function index(Request $request)
     {
         //abort_if(Gate::denies('tag_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //TagFinder::all();
+
         if ($request->ajax()) {
-            $query = Tag::query()->select(sprintf('%s.*', (new Tag())->table));
-            $table = Datatables::of($query);
+            $table = Datatables::of(TagDataTable::source());
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
@@ -72,6 +70,8 @@ class TagController extends Controller
         TagCreator::create(
             new TagDto($request->all())
         );
+
+        return redirect()->route('backoffice.tags.index');
     }
 
     public function edit(int $id)
@@ -100,6 +100,8 @@ class TagController extends Controller
             new TagDto($request->all()),
             $id
         );
+
+        return redirect()->route('backoffice.tags.index');
     }
 
     public function destroy(int $id)
@@ -108,6 +110,6 @@ class TagController extends Controller
 
         TagDestroyer::destroy($id);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return back();
     }
 }

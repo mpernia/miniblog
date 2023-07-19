@@ -5,10 +5,7 @@ namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Permission\PermissionCreator;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Permission\PermissionDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Permission\PermissionFinder;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Permission\PermissionUpdater;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StorePermissionRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdatePermissionRequest;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Permission;
@@ -20,7 +17,7 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         //abort_if(Gate::denies('permission_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PermissionFinder::all();
+
         if ($request->ajax()) {
             $query = Permission::query()->select(sprintf('%s.*', (new Permission)->table));
             $table = Datatables::of($query);
@@ -90,6 +87,6 @@ class PermissionController extends Controller
     {
         abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return back();
     }
 }

@@ -13,7 +13,7 @@
         </div>
 
         <div class="card-body">
-            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-ContentPage">
+            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-post">
                 <thead>
                 <tr>
                     <th width="10">
@@ -37,7 +37,7 @@
                     <th>
                         {{ trans('cruds.post.fields.created_at') }}
                     </th>
-                    <th>
+                    <th class="td-action">
                         &nbsp;
                     </th>
                 </tr>
@@ -109,7 +109,7 @@
                 aaSorting: [],
                 ajax: "{{ route('backoffice.posts.index') }}",
                 columns: [
-                    { data: 'placeholder', name: 'placeholder' },
+                    { data: 'placeholder', name: 'placeholder', visible:false },
                     { data: 'title', name: 'title' },
                     { data: 'category', name: 'categories.name' },
                     { data: 'tag', name: 'tags.name' },
@@ -122,7 +122,7 @@
                 order: [[ 6, 'desc' ]],
                 pageLength: 100,
             };
-            let table = $('.datatable-ContentPage').DataTable(dtOverrideGlobals);
+            let table = $('.datatable-post').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();

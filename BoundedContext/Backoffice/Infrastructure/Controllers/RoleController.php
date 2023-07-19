@@ -5,7 +5,8 @@ namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Permission\PermissionFinder;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Role\RoleDataTable;
+use MiniBlog\BoundedContext\Shared\Application\Actions\Permission\PermissionLister;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleFinder;
@@ -13,9 +14,6 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\Role\RoleUpdater;
 use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\RoleDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreRoleRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateRoleRequest;
-use MiniBlog\Shared\Infrastructure\Persistences\Models\Permission;
-use MiniBlog\Shared\Infrastructure\Persistences\Models\Role;
-use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
@@ -23,10 +21,9 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         //abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //RoleFinder::all();
+
         if ($request->ajax()) {
-            $query = Role::with(['permissions'])->select(sprintf('%s.*', (new Role)->table));
-            $table = Datatables::of($query);
+            $table = Datatables::of(RoleDataTable::source());
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
@@ -69,8 +66,7 @@ class RoleController extends Controller
     {
         //abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        //PermissionFinder::all();
-        $permissions = Permission::orderBy('description')->pluck('description', 'id');
+        $permissions = PermissionLister::list();
 
         return view('backoffice.role.create', compact('permissions'));
     }
@@ -82,14 +78,16 @@ class RoleController extends Controller
         RoleCreator::create(
             new RoleDto($request->all())
         );
+
+        return redirect()->route('backoffice.roles.index');
     }
 
     public function edit(int $id)
     {
         //abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        //PermissionFinder::all();
-        $permissions = Permission::pluck('description', 'id');
+        $permissions = PermissionLister::list();
+
         $role = RoleFinder::find($id);
 
         return view('backoffice.role.edit', compact('role', 'permissions'));
@@ -113,6 +111,8 @@ class RoleController extends Controller
             new RoleDto($request->all()),
             $id
         );
+
+        return redirect()->route('backoffice.roles.index');
     }
 
     public function destroy(int $id)
@@ -121,6 +121,6 @@ class RoleController extends Controller
 
         RoleDestroyer::destroy($id);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return back();
     }
 }

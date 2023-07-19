@@ -13,8 +13,20 @@ class PostUpdater implements UpdaterInterface
     {
         $repository = new PostRepository;
 
-        $row = $repository->update($value, $data->toArray());
+        $post = $repository->update($value, $data->toArray());
+        $post->categories()->sync($data->categories, []);
+        $post->tags()->sync($data->tags, []);
+        if ($data->featured_image){
+            if (!$post->featured_image || $data->featured_image !== $post->featured_image->file_name) {
+                if ($post->featured_image) {
+                    $post->featured_image->delete();
+                }
+                $post->addMedia(storage_path('tmp/uploads/' . basename($data->featured_image)))->toMediaCollection('featured_image');
+            }
+        } elseif ($post->featured_image) {
+            $post->featured_image->delete();
+        }
 
-        return new PostDto($row->toArray());
+        return new PostDto($post->toArray());
     }
 }

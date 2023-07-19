@@ -3,14 +3,18 @@
 namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryFinder;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Post\PostDataTable;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Post\PostEditor;
+use MiniBlog\BoundedContext\Backoffice\Domain\DataTransferObjects\NewPostDto;
+use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryLister;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostFinder;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostUpdater;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagFinder;
+use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagLister;
 use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\PostDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StorePostRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdatePostRequest;
@@ -25,10 +29,9 @@ class PostController extends Controller
     public function index(Request $request)
     {
         //abort_if(Gate::denies('post_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //PostFinder::all();
+
         if ($request->ajax()) {
-            $query = Post::with(['categories', 'tags'])->select(sprintf('%s.*', (new Post())->table));
-            $table = Datatables::of($query);
+            $table = Datatables::of(PostDataTable::source());
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
@@ -97,12 +100,9 @@ class PostController extends Controller
     public function create()
     {
         //abort_if(Gate::denies('post_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //CategoryFinder::all();
-        //TagFinder::all();
 
-        $categories = Category::pluck('name', 'id');
-
-        $tags = Tag::pluck('name', 'id');
+        $categories = CategoryLister::list();
+        $tags = TagLister::list();
 
         return view('backoffice.post.create', compact('categories', 'tags'));
     }
@@ -112,19 +112,19 @@ class PostController extends Controller
         //abort_if(Gate::denies('post_store'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         PostCreator::create(
-            new PostDto($request->all())
+            new NewPostDto($request->all())
         );
+
+        return redirect()->route('backoffice.posts.index');
     }
 
     public function edit(int $id)
     {
         //abort_if(Gate::denies('post_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //TagFinder::all();
 
-        $categories = Category::pluck('name', 'id');
-        $tags = Tag::pluck('name', 'id');
-        $post = PostFinder::find($id);
-        $post->load('categories', 'tags');
+        $categories = CategoryLister::list();
+        $tags = TagLister::list();
+        $post = PostEditor::edit($id);
 
         return view('backoffice.post.edit', compact('categories', 'post', 'tags'));
     }
@@ -134,7 +134,6 @@ class PostController extends Controller
         //abort_if(Gate::denies('post_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $post = PostFinder::find($id);
-        $post->load('categories', 'tags');
 
         return view('backoffice.post.show', compact( 'post'));
     }
@@ -147,6 +146,8 @@ class PostController extends Controller
             new PostDto($request->all()),
             $id
         );
+
+        return redirect()->route('backoffice.posts.index');
     }
 
     public function destroy(int $id)
@@ -155,6 +156,59 @@ class PostController extends Controller
 
         PostDestroyer::destroy($id);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return back();
+    }
+
+    public function storeCKEditorImages(Request $request): JsonResponse
+    {
+        //abort_if(Gate::denies('post_create') && Gate::denies('post_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $model         = new Post();
+        $model->id     = $request->input('crud_id', 0);
+        $model->exists = true;
+        $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
+
+        return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
+    }
+
+    public function storeMedia(Request $request): JsonResponse
+    {
+        //abort_if(Gate::denies('post_create') && Gate::denies('post_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if (request()->has('size')) {
+            $this->validate(request(), [
+                'file' => 'max:' . request()->input('size') * 1024,
+            ]);
+        }
+
+        if (request()->has('width') || request()->has('height')) {
+            $this->validate(request(), [
+                'file' => sprintf(
+                    'image|dimensions:max_width=%s,max_height=%s',
+                    request()->input('width', 100000),
+                    request()->input('height', 100000)
+                ),
+            ]);
+        }
+
+        $path = storage_path('tmp/uploads');
+
+        try {
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
+        } catch (\Exception $e) {
+        }
+
+        $file = $request->file('file');
+
+        $name = uniqid() . '_' . trim($file->getClientOriginalName());
+
+        $file->move($path, $name);
+
+        return response()->json([
+            'name'          => $name,
+            'original_name' => $file->getClientOriginalName(),
+        ]);
     }
 }

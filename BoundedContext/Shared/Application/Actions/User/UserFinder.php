@@ -13,9 +13,12 @@ class UserFinder implements FinderInterface
     {
         $repository = new UserRepository;
 
-        $row = $repository->find($value);
+        $user = $repository->find($value);
+        $user->load(['roles']);
+        $userDto = new userDto($user->toArray());
+        $userDto->roles = $user->roles->pluck('title', 'id')->toArray();
 
-        return new userDto($row->toArray());
+        return $userDto;
     }
 
     public static function all() : array

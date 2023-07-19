@@ -9,8 +9,13 @@ class PostDto extends DataTransferObject
     protected $fillable = [
         'id',
         'title',
+        'slug',
         'content',
         'excerpt',
         'created_at',
+        'categories',
+        'tags',
+        'featured_image',
+        'created_at'
     ];
 }

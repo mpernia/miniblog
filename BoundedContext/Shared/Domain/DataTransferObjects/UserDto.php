@@ -11,5 +11,6 @@ class UserDto extends DataTransferObject
         'name',
         'email',
         'password',
+        'roles'
     ];
 }

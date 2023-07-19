@@ -5,16 +5,16 @@ namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use MiniBlog\BoundedContext\Backend\Infrastructure\Resources\CategoryResource;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Category\CategoryDataTable;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryFinder;
+use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryLister;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryUpdater;
 use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\CategoryDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreCategoryRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateCategoryRequest;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Category;
-use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
@@ -22,10 +22,9 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         //abort_if(Gate::denies('category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        //CategoryFinder::all();
+
         if ($request->ajax()) {
-            $query = Category::query()->select(sprintf('%s.*', (new Category())->table));
-            $table = Datatables::of($query);
+            $table = Datatables::of(CategoryDataTable::source());
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
@@ -51,19 +50,26 @@ class CategoryController extends Controller
             $table->editColumn('slug', function ($row) {
                 return $row->slug ? $row->slug : '';
             });
+            $table->addColumn('parent_name', function ($row) {
+                return $row->parent ? $row->parent->name : '';
+            });
 
             $table->rawColumns(['actions', 'placeholder']);
 
             return $table->make(true);
         }
-        return view('backoffice.category.index');
+        $categories = Category::pluck('name', 'id');
+
+        return view('backoffice.category.index', compact('categories'));
     }
 
     public function create()
     {
         //abort_if(Gate::denies('category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('backoffice.category.create');
+        $parents = CategoryLister::list()->prepend(trans('global.pleaseSelect'), '');
+
+        return view('backoffice.category.create', compact('parents'));
     }
 
     public function store(StoreCategoryRequest $request)
@@ -73,6 +79,8 @@ class CategoryController extends Controller
         CategoryCreator::create(
             new CategoryDto($request->all())
         );
+
+        return redirect()->route('backoffice.categories.index');
     }
 
     public function edit(int $id)
@@ -80,8 +88,9 @@ class CategoryController extends Controller
         //abort_if(Gate::denies('category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $category = CategoryFinder::find($id);
+        $parents = CategoryLister::list()->prepend(trans('global.pleaseSelect'), '');
 
-        return view('backoffice.category.edit', compact('category'));
+        return view('backoffice.category.edit', compact('category', 'parents'));
     }
 
     public function show(int $id)
@@ -100,6 +109,8 @@ class CategoryController extends Controller
         CategoryUpdater::update(
             new CategoryDto($request->all()), $id
         );
+
+        return redirect()->route('backoffice.categories.index');
     }
 
     public function destroy(int $id)
@@ -108,6 +119,6 @@ class CategoryController extends Controller
 
         CategoryDestroyer::destroy($id);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return back();
     }
 }

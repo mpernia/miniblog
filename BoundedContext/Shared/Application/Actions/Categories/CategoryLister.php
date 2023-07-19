@@ -1,10 +1,11 @@
 <?php
 
-namespace MiniBlog\BoundedContext\Frontend\Application\Actions\Home;
+namespace MiniBlog\BoundedContext\Shared\Application\Actions\Categories;
 
 use MiniBlog\BoundedContext\Shared\Infrastructure\Persistences\Repositories\CategoryRepository;
+use MiniBlog\Shared\Domain\Contracts\ListerInterface;
 
-class CategoryLister
+class CategoryLister implements ListerInterface
 {
     public static function list()
     {

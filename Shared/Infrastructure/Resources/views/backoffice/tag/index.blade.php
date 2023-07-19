@@ -6,32 +6,36 @@
 
 @section('back_content')
     <h2 class="h3">Tags</h2>
-    <div class="card">
-        <div class="card-header">
-            {{ trans('cruds.contentTag.title_singular') }} {{ trans('global.list') }}
-        </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 my-5 pt-5">
+            <div class="card">
+                <div class="card-header">
+                    {{ trans('cruds.tag.title_singular') }} {{ trans('global.list') }}
+                </div>
+                <div class="card-body">
+                    <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-tag">
+                        <thead>
+                        <tr>
+                            <th width="10">
 
-        <div class="card-body">
-            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-ContentTag">
-                <thead>
-                <tr>
-                    <th width="10">
-
-                    </th>
-                    <th>
-                        {{ trans('cruds.tag.fields.name') }}
-                    </th>
-                    <th>
-                        {{ trans('cruds.tag.fields.slug') }}
-                    </th>
-                    <th>
-                        &nbsp;
-                    </th>
-                </tr>
-                </thead>
-            </table>
+                            </th>
+                            <th>
+                                {{ trans('cruds.tag.fields.name') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.tag.fields.slug') }}
+                            </th>
+                            <th class="td-action">
+                                &nbsp;
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
 @endsection
 
 @section('back_scripts')
@@ -58,7 +62,7 @@
                 aaSorting: [],
                 ajax: "{{ route('backoffice.tags.index') }}",
                 columns: [
-                    { data: 'placeholder', name: 'placeholder' },
+                    { data: 'placeholder', name: 'placeholder', visible:false },
                     { data: 'name', name: 'name' },
                     { data: 'slug', name: 'slug' },
                     { data: 'actions', name: '{{ trans('global.actions') }}' }
@@ -67,7 +71,7 @@
                 order: [[ 1, 'asc' ]],
                 pageLength: 100,
             };
-            let table = $('.datatable-ContentTag').DataTable(dtOverrideGlobals);
+            let table = $('.datatable-tag').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();

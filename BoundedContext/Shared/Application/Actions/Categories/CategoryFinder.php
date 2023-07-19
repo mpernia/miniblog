@@ -13,9 +13,12 @@ class CategoryFinder implements FinderInterface
     {
         $repository = new CategoryRepository;
 
-        $row = $repository->find($value);
+        $category = $repository->find($value);
+        $category->load('parent');
+        $categoryDto = new CategoryDto($category->toArray());
+        $categoryDto->parent_name = $category->parent?->name;
 
-        return new CategoryDto($row->toArray());
+        return $categoryDto;
     }
 
     public static function all(): array

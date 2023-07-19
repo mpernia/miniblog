@@ -9,5 +9,6 @@ class RoleDto extends DataTransferObject
     protected $fillable = [
         'id',
         'title',
+        'permissions',
     ];
 }

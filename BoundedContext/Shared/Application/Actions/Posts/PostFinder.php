@@ -13,9 +13,14 @@ class PostFinder implements FinderInterface
     {
         $repository = new PostRepository;
 
-        $row = $repository->find($value);
-
-        return new PostDto($row->toArray());
+        $post = $repository->find($value);
+        $post->load('categories', 'tags');
+        $postDto = new PostDto($post->toArray());
+        $postDto->categories = $post->categories()->pluck('name', 'id');
+        $postDto->tags = $post->tags()->pluck('name', 'id');
+        $postDto->created_at = $post->created_at?->locale(app()->getLocale())->isoFormat(('d MMMM Y')) ;
+        $postDto->featured_image = $post->featured_image->url;
+        return $postDto;
     }
 
     public static function all() : array

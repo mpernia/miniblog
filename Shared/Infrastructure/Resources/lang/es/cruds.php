@@ -87,6 +87,8 @@ return [
             'name_helper'       => ' ',
             'slug'              => 'Slug',
             'slug_helper'       => ' ',
+            'parent'            => 'Categoría principal',
+            'parent_helper'     => ' ',
             'created_at'        => 'Creado',
             'created_at_helper' => ' ',
             'updated_at'        => 'Actualizado',
@@ -121,6 +123,8 @@ return [
             'id_helper'             => ' ',
             'title'                 => 'Título',
             'title_helper'          => ' ',
+            'slug'                  => 'Slug',
+            'title_slug'            => ' ',
             'category'              => 'Categorias',
             'category_helper'       => ' ',
             'tag'                   => 'Etiquetast',
@@ -143,5 +147,4 @@ return [
         'title'          => 'Configuración',
         'title_singular' => 'Configuración',
     ],
-
 ];

@@ -13,9 +13,11 @@ class RoleFinder implements FinderInterface
     {
         $repository = new RoleRepository;
 
-        $row = $repository->find($value);
+        $role = $repository->with(['permissions'])->find($value);
+        $roleDto = new RoleDto($role->toArray());
+        $roleDto->permissions = $role->permissions->pluck('description', 'id')->toArray();
 
-        return new RoleDto($row->toArray());
+        return $roleDto;
     }
 
     public static function all() : array
