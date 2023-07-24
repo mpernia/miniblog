@@ -4,6 +4,7 @@ namespace MiniBlog\Shared\Infrastructure\Persistences\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -36,17 +37,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected function serializeDate(DateTimeInterface $date)
+    protected function serializeDate(DateTimeInterface $date) : string
     {
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function getIsAdminAttribute()
+    public function getIsAdminAttribute() : bool
     {
         return $this->roles()->where('id', 1)->exists();
     }
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
     }

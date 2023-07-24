@@ -4,6 +4,7 @@ namespace MiniBlog\Shared\Domain\DataTransferObjects;
 
 use MiniBlog\Shared\Domain\Contracts\DataTransferObjectInterface;
 use MiniBlog\Shared\Infrastructure\Exceptions\UndefinedMethodException;
+use AllowDynamicProperties;
 
 #[AllowDynamicProperties]
 class DataTransferObject implements DataTransferObjectInterface

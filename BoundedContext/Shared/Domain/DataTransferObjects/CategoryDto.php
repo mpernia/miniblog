@@ -11,6 +11,5 @@ class CategoryDto extends DataTransferObject
         'name',
         'slug',
         'parent_id',
-        'parent_name',
     ];
 }

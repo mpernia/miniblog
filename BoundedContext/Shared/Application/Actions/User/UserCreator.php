@@ -7,14 +7,10 @@ use MiniBlog\BoundedContext\Shared\Infrastructure\Persistences\Repositories\User
 use MiniBlog\Shared\Domain\Contracts\CreatorInterface;
 use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
-class UserCreator implements CreatorInterface
+class UserCreator
 {
-    public static function create(DataTransferObject $data) : DataTransferObject
+    public static function create(DataTransferObject $data)
     {
-        $repository = new UserRepository;
-
-        $row = $repository->create($data->toArray());
-
-        return new UserDto($row->toArray());
+        return (new UserRepository)->create($data->toArray());
     }
 }

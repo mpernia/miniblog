@@ -10,6 +10,7 @@ This repository is developed for Laravel Framework 10 or higher.
 - [Dependencies](#dependencies)
 - [Configuration](#configuration)
   - [Laravel Media Library](#spatie-laravel-medialibrary)
+  - [L5-Swagger](#l5-swagger)
   - [Modify the main composer file](#modify-the-main-composer-file)
   - [Providers](#providers)
   - [Authentication](#authentication)
@@ -44,12 +45,13 @@ This repository requires the following dependencies:
 * yajra/laravel-datatables-oracle
 * spatie/laravel-medialibrary
 * laravel/ui
+* darkaonline/l5-swagger
 
 To install the required libraries in the terminal move to the root dir and run this commands:
 
 *
   ```sh
-    composer require yajra/laravel-datatables-oracle spatie/laravel-medialibrary
+    composer require yajra/laravel-datatables-oracle spatie/laravel-medialibrary darkaonline/l5-swagger
   ```
 *
   ```sh
@@ -90,6 +92,12 @@ If you configure a dedicated disk you need to edit the config file `media-librar
 'disk_name' => 'media',
 
 ```
+
+### L5-Swagger 
+
+#### Installation and Configuration
+
+To install Swagger in Laravel we are going to use the L5-Swagger module on GitHub. You can check the information about the integration developed by DarkaOnLine at [Installation & Configuration](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration).
 
 ### Modify the main composer file
 
@@ -163,8 +171,9 @@ Edit the file `app/Http/Kernel.php` and put this code:
     ];
 
     protected $routeMiddleware = [
-        'admin'     => \MiniBlog\BoundedContext\Backoffice\Infrastructure\Middlewares\IsAdmin::class,
-        'frontend'  => \MiniBlog\BoundedContext\Frontend\Infrastructure\Middlewares\Frontend::class,
+        'admin'    => \MiniBlog\BoundedContext\Backoffice\Infrastructure\Middlewares\IsAdmin::class,
+        'frontend' => \MiniBlog\BoundedContext\Frontend\Infrastructure\Middlewares\Frontend::class,
+        'isguest'  => \MiniBlog\Shared\Infrastructure\Middlewares\IsAuthenticated::class,
     ];
 ```
 

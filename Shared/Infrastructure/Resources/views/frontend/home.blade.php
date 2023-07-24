@@ -14,10 +14,10 @@
     </div>
 
     <div class="row g-3">
-        <div class="col-md-10">
+        <div class="col-md-10 pb-5">
             <h3 class="pb-2 mb-2 fst-italic border-bottom">{{ trans('frontend.title') }}</h3>
 
-            <div class="row mb-2 mt-5 row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="row my-2 g-3">
                 @foreach($posts as $post)
                     <div class="col-md-4">
                         @include('partials.frontend.post_card')

@@ -50,16 +50,16 @@
                     <td>
                         <select class="search">
                             <option value>{{ trans('global.all') }}</option>
-                            @foreach($categories as $key => $item)
-                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @foreach($categories as $key => $value)
+                                <option value="{{ $value }}">{{ $value }}</option>
                             @endforeach
                         </select>
                     </td>
                     <td>
                         <select class="search">
                             <option value>{{ trans('global.all') }}</option>
-                            @foreach($tags as $key => $item)
-                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @foreach($tags as $key => $value)
+                                <option value="{{ $value }}">{{ $value }}</option>
                             @endforeach
                         </select>
                     </td>

@@ -13,8 +13,18 @@ class CategoryController extends Controller
         //CategoryFinder::all();
     }
 
-    public function show(int $id)
+    public function show(int|string $id)
     {
         //CategoryFinder::find($id);
+    }
+
+    public function allPost()
+    {
+        //
+    }
+
+    public function showPost(int|string $id)
+    {
+        //
     }
 }

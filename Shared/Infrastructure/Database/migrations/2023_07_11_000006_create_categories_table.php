@@ -12,7 +12,6 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('slug')->nullable();
-            $table->string('parent_name')->nullable();
             $table->softDeletes();
         });
     }

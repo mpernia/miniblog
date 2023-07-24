@@ -11,6 +11,6 @@ class PermissionLister implements ListerInterface
     {
         $repository = new PermissionRepository;
 
-        return $repository->pluck('description', 'id');
+        return $repository->pluck('description');
     }
 }

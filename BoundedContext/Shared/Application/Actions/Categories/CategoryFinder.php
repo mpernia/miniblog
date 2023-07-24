@@ -9,14 +9,14 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 class CategoryFinder implements FinderInterface
 {
 
-    public static function find(int|string $value): DataTransferObject
+    public static function find(int|string $value, string $column = 'id'): DataTransferObject
     {
         $repository = new CategoryRepository;
+        $repository->setRouteKeyName($column);
 
         $category = $repository->find($value);
         $category->load('parent');
         $categoryDto = new CategoryDto($category->toArray());
-        $categoryDto->parent_name = $category->parent?->name;
 
         return $categoryDto;
     }

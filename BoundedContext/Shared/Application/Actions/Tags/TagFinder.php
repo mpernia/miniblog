@@ -9,13 +9,14 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
 class TagFinder implements FinderInterface
 {
-    public static function find(int|string $value, string $key = 'id') : DataTransferObject
+    public static function find(int|string $value, string $column = 'id') : DataTransferObject
     {
         $repository = new TagRepository;
+        $repository->setRouteKeyName($column);
 
-        $row = $repository->find($value);
+        $tag = $repository->find($value);
 
-        return new TagDto($row->toArray());
+        return new TagDto($tag->toArray());
     }
 
     public static function all() : array

@@ -1,6 +1,6 @@
 <?php
 
-namespace MiniBlog\BoundedContext\Frontend\Application\Actions\Home;
+namespace MiniBlog\BoundedContext\Frontend\Application\Actions\Post;
 
 use MiniBlog\BoundedContext\Shared\Infrastructure\Persistences\Repositories\PostRepository;
 

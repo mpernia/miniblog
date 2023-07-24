@@ -8,13 +8,13 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagFinder;
 
 class TagController extends Controller
 {
-    public function index(Request $request)
+    public function allPost()
     {
-        //TagFinder::all();
+        //
     }
 
-    public function show(int $id)
+    public function showPost()
     {
-        //TagFinder::find($id);
+        //
     }
 }

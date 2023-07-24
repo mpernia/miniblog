@@ -3,13 +3,12 @@
 namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use MiniBlog\BoundedContext\Backoffice\Application\Actions\Category\CategoryDataTable;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Category\CategoryLister;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryFinder;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryLister;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryUpdater;
 use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\CategoryDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreCategoryRequest;
@@ -58,7 +57,8 @@ class CategoryController extends Controller
 
             return $table->make(true);
         }
-        $categories = Category::pluck('name', 'id');
+
+        $categories = CategoryLister::list();
 
         return view('backoffice.category.index', compact('categories'));
     }

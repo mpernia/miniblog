@@ -1,10 +1,8 @@
 <?php
 
-namespace MiniBlog\BoundedContext\Frontend\Application\Actions\Home;
+namespace MiniBlog\BoundedContext\Frontend\Application\Actions\Tag;
 
-use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\TagDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Persistences\Repositories\TagRepository;
-use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 use MiniBlog\Shared\Domain\ValueObjects\OrderBy;
 
 
@@ -14,7 +12,7 @@ class TagScorer
     {
         return TagRepository::sqlRaw("
             SELECT
-                tags.id, tags.name, ((COUNT(post_tag.tag_id) * 2)+12) AS score
+                tags.id, tags.name, COUNT(post_tag.tag_id) AS score
             FROM tags
                 INNER JOIN post_tag ON post_tag.tag_id = tags.id
             WHERE tags.deleted_at IS NULL

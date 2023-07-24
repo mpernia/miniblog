@@ -4,7 +4,7 @@
     <div class="pb-4">
         <ol class="list-unstyled mb-0">
             <li><a href="{{ route('frontend.categories.show', ['uncategorized']) }}">{{ trans('frontend.uncategorized') }}</a></li>
-            @foreach($categories as $id => $name)
+            @foreach($sections->categories as $id => $name)
                 <li><a href="{{ route('frontend.categories.show', [$id]) }}">{{ $name }}</a></li>
             @endforeach
         </ol>
@@ -12,8 +12,12 @@
 
     <h3 class="pb-2 mb-2 fst-italic border-bottom">{{ trans('frontend.tags') }}</h3>
     <div class="tag-cloud">
-        @foreach ($tags as $tag)
-            <a href="{{ route('frontend.tags.show', $tag->id) }}" style="font-size: {{ $tag->score }}px;">{{ $tag->name }}</a>
+        @foreach ($sections->tags as $tag)
+            <a href="{{-- route('frontend.tags.show', $tag->id) --}}">
+                {{ $tag->name }}
+            </a>
         @endforeach
     </div>
+  </span>
 </div>
+

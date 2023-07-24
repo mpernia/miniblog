@@ -10,6 +10,7 @@ use MiniBlog\Shared\Infrastructure\Exceptions\ModelNotDefinedException;
 abstract class EloquentRepository implements RepositoryInterface
 {
     protected $model;
+    protected string $routeKeyName = 'id';
 
     public function __construct()
     {
@@ -31,6 +32,11 @@ abstract class EloquentRepository implements RepositoryInterface
         return method_exists($this, $where);
     }
 
+    public function setRouteKeyName(string $name) : void
+    {
+        $this->routeKeyName = $name;
+    }
+
     public function table()
     {
         return $this->model->table;
@@ -46,7 +52,7 @@ abstract class EloquentRepository implements RepositoryInterface
         return DB::select($query);
     }
 
-    public function sync(int $id, array $ids, string $related, string $relatedKey, string $foreignKey) : void
+    public function sync(int|string $id, array $ids, string $related, string $relatedKey, string $foreignKey) : void
     {
         DB::delete("DELETE * FROM {$related} WHERE {$foreignKey} = {$id}");
         $values = stringCouples($id, $ids);
@@ -58,9 +64,9 @@ abstract class EloquentRepository implements RepositoryInterface
         return $this->model->all();
     }
 
-    public function find(int $id)
+    public function find(int|string $id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->where($this->routeKeyName, $id)->first();
     }
 
     public function findWhere(string $column, mixed $value)
@@ -98,14 +104,14 @@ abstract class EloquentRepository implements RepositoryInterface
         return $this->model::create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update(int|string $id, array $data)
     {
         $record = $this->find($id);
         $record->update($data);
         return $record;
     }
 
-    public function delete(int $id)
+    public function delete(int|string $id)
     {
         return $this->find($id)->delete();
     }

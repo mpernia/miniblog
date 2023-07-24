@@ -4,12 +4,12 @@ namespace MiniBlog\BoundedContext\Backoffice\Infrastructure\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Category\CategoryLister;
 use MiniBlog\BoundedContext\Backoffice\Application\Actions\Post\PostDataTable;
 use MiniBlog\BoundedContext\Backoffice\Application\Actions\Post\PostEditor;
+use MiniBlog\BoundedContext\Backoffice\Application\Actions\Post\PostEditorImageUploader;
 use MiniBlog\BoundedContext\Backoffice\Domain\DataTransferObjects\NewPostDto;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryLister;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostCreator;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostDestroyer;
 use MiniBlog\BoundedContext\Shared\Application\Actions\Posts\PostFinder;
@@ -18,9 +18,7 @@ use MiniBlog\BoundedContext\Shared\Application\Actions\Tags\TagLister;
 use MiniBlog\BoundedContext\Shared\Domain\DataTransferObjects\PostDto;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StorePostRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdatePostRequest;
-use MiniBlog\Shared\Infrastructure\Persistences\Models\Category;
 use MiniBlog\Shared\Infrastructure\Persistences\Models\Post;
-use MiniBlog\Shared\Infrastructure\Persistences\Models\Tag;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -91,8 +89,8 @@ class PostController extends Controller
             return $table->make(true);
         }
 
-        $categories = Category::get();
-        $tags       = Tag::get();
+        $categories = CategoryLister::list();
+        $tags       = TagLister::list();
 
         return view('backoffice.post.index', compact('categories', 'tags'));
     }
@@ -163,10 +161,7 @@ class PostController extends Controller
     {
         //abort_if(Gate::denies('post_create') && Gate::denies('post_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $model         = new Post();
-        $model->id     = $request->input('crud_id', 0);
-        $model->exists = true;
-        $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
+        $media = PostEditorImageUploader::upload($request);
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
     }

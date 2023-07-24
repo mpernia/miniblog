@@ -6,11 +6,13 @@ interface RepositoryInterface
 {
     public static function sqlRaw(string $query): array;
 
-    public function sync(int $id, array $ids, string $related, string $relatedKey, string $foreignKey) : void;
+    public function setRouteKeyName(string $name) : void;
+
+    public function sync(int|string $id, array $ids, string $related, string $relatedKey, string $foreignKey) : void;
 
     public function all();
 
-    public function find(int $id);
+    public function find(int|string $id);
 
     public function findWhere(string $column, mixed $value);
 
@@ -26,7 +28,7 @@ interface RepositoryInterface
 
     public function create(array $data);
 
-    public function update(int $id, array $data);
+    public function update(int|string $id, array $data);
 
-    public function delete(int $id);
+    public function delete(int|string $id);
 }

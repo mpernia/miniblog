@@ -1,3 +1,19 @@
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -70,8 +86,6 @@
     z-index: 1500;
 }
 
-/* stylelint-disable stylistic/selector-list-comma-newline-after */
-
 .blog-header-logo {
     font-family: "Playfair Display", Georgia, "Times New Roman", serif/*rtl:Amiri, Georgia, "Times New Roman", serif*/;
     font-size: 2.25rem;
@@ -94,14 +108,12 @@ h1, h2, h3, h4, h5, h6 {
     .h-md-250 { height: 250px; }
 }
 
-/* Pagination */
+
 .blog-pagination {
     margin-bottom: 4rem;
 }
 
-/*
- * Blog posts
- */
+
 .blog-post {
     margin-bottom: 4rem;
 }
@@ -184,4 +196,16 @@ h1, h2, h3, h4, h5, h6 {
 .tags-list, ul li {
     margin-right: 10px;
     display: inline-block;
+}
+
+.auth-container {
+    position: relative;
+    height: 100vh;
+}
+
+.auth-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

@@ -8,6 +8,8 @@ use MiniBlog\Shared\Infrastructure\Persistences\Repositories\BaseRepository;
 
 class TagRepository extends BaseRepository implements TagRepositoryInterface
 {
+    protected  string $routeKeyName = 'slug';
+
     public function setModel(): string
     {
         return Tag::class;

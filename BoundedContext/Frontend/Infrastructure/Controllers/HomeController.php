@@ -3,18 +3,18 @@
 namespace MiniBlog\BoundedContext\Frontend\Infrastructure\Controllers;
 
 use App\Http\Controllers\Controller;
-use MiniBlog\BoundedContext\Frontend\Application\Actions\Home\PostPaginator;
-use MiniBlog\BoundedContext\Frontend\Application\Actions\Home\TagScorer;
-use MiniBlog\BoundedContext\Shared\Application\Actions\Categories\CategoryLister;
+use MiniBlog\BoundedContext\Frontend\Application\Actions\Post\PostPaginator;
+use MiniBlog\BoundedContext\Frontend\Infrastructure\Traits\SectionLoader;
 
 class HomeController extends Controller
 {
+    use SectionLoader;
+
     public function __invoke()
     {
         $posts = PostPaginator::paginate();
-        $categories = CategoryLister::list();
-        $tags = TagScorer::score();
+        $sections = $this->loadSections();
 
-        return view('frontend.home', compact('posts', 'tags', 'categories'));
+        return view('frontend.home', compact('posts', 'sections'));
     }
 }

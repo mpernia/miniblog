@@ -1,6 +1,6 @@
 <?php
 
-namespace MiniBlog\BoundedContext\Shared\Application\Actions\Categories;
+namespace MiniBlog\BoundedContext\Backoffice\Application\Actions\Category;
 
 use MiniBlog\BoundedContext\Shared\Infrastructure\Persistences\Repositories\CategoryRepository;
 use MiniBlog\Shared\Domain\Contracts\ListerInterface;
@@ -11,6 +11,6 @@ class CategoryLister implements ListerInterface
     {
         $repository = new CategoryRepository;
 
-        return $repository->pluck('name', 'id');
+        return $repository->pluck('name');
     }
 }

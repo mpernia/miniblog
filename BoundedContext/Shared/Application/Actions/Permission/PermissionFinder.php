@@ -9,13 +9,14 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
 class PermissionFinder implements FinderInterface
 {
-    public static function find(int|string $value) : DataTransferObject
+    public static function find(int|string $value, string $column = 'id') : DataTransferObject
     {
         $repository = new PermissionRepository;
+        $repository->setRouteKeyName('id');
 
-        $row = $repository->find($value);
+        $permission = $repository->find($value);
 
-        return new PermissionDto($row->toArray());
+        return new PermissionDto($permission->toArray());
     }
 
     public static function all() : array

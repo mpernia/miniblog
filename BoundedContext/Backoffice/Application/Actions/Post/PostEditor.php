@@ -11,7 +11,7 @@ class PostEditor
     public static function edit(int|string $value) : DataTransferObject
     {
         $repository = new PostRepository;
-
+        $repository->setRouteKeyName('id');
         $post = $repository->find($value);
         $post->load('categories', 'tags');
         $postDto = new PostDto($post->toArray());

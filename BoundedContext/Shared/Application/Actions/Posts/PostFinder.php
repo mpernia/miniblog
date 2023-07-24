@@ -9,9 +9,10 @@ use MiniBlog\Shared\Domain\DataTransferObjects\DataTransferObject;
 
 class PostFinder implements FinderInterface
 {
-    public static function find(int|string $value) : DataTransferObject
+    public static function find(int|string $value, string $column = 'id') : DataTransferObject
     {
         $repository = new PostRepository;
+        $repository->setRouteKeyName($column);
 
         $post = $repository->find($value);
         $post->load('categories', 'tags');
@@ -19,7 +20,7 @@ class PostFinder implements FinderInterface
         $postDto->categories = $post->categories()->pluck('name', 'id');
         $postDto->tags = $post->tags()->pluck('name', 'id');
         $postDto->created_at = $post->created_at?->locale(app()->getLocale())->isoFormat(('d MMMM Y')) ;
-        $postDto->featured_image = $post->featured_image->url;
+        $postDto->featured_image = $post->featured_image->url ?? null;
         return $postDto;
     }
 

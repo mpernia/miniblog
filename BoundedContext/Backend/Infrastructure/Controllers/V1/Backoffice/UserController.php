@@ -1,9 +1,9 @@
 <?php
 
-namespace MiniBlog\BoundedContext\Backend\Infrastructure\Controllers\V1;
+namespace MiniBlog\BoundedContext\Backend\Infrastructure\Controllers\V1\Backoffice;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
+use MiniBlog\BoundedContext\Backend\Infrastructure\Controllers\BackendController;
 use MiniBlog\BoundedContext\Backend\Infrastructure\Resources\UserCollection;
 use MiniBlog\BoundedContext\Backend\Infrastructure\Resources\UserResource;
 use MiniBlog\BoundedContext\Shared\Application\Actions\User\UserCreator;
@@ -15,7 +15,7 @@ use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\StoreUserRequest;
 use MiniBlog\BoundedContext\Shared\Infrastructure\Requests\UpdateUserRequest;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class UserController extends BackendController
 {
     public function index()
     {

@@ -11,6 +11,6 @@ class RoleLister implements ListerInterface
     {
         $repository = new RoleRepository;
 
-        return $repository->pluck('title', 'id');
+        return $repository->pluck('title');
     }
 }

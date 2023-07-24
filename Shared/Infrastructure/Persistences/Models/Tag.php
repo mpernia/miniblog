@@ -5,6 +5,7 @@ namespace MiniBlog\Shared\Infrastructure\Persistences\Models;
 use \DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tag extends Model
@@ -24,12 +25,17 @@ class Tag extends Model
         'slug',
     ];
 
-    public function posts()
+    public function getRouteKeyName() : string
+    {
+        return 'slug';
+    }
+
+    public function posts() : HasMany
     {
         return $this->hasMany(Post::class);
     }
 
-    protected function serializeDate(DateTimeInterface $date)
+    protected function serializeDate(DateTimeInterface $date) : string
     {
         return $date->format('Y-m-d H:i:s');
     }

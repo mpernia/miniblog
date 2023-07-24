@@ -11,6 +11,6 @@ class TagLister implements ListerInterface
     {
         $repository = new TagRepository;
 
-        return $repository->pluck('name', 'id');
+        return $repository->pluck('name');
     }
 }
